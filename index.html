@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mental Calculation</title>
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        padding: clamp(12px, 4vw, 32px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 100%;
+        max-width: 500px;
+        box-sizing: border-box;
+    }
+    
+    h1 {
+        text-align: center;
+        font-size: clamp(1.4rem, 5vw, 1.8rem);
+        font-weight: 700;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .form-group {
+        margin-bottom: 12px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+        font-size: 14px;
+        color: #374151;
+    }
+    
+    input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 15px;
+        background: rgba(255, 255, 255, 0.8);
+        box-sizing: border-box;
+    }
+    
+    input[type="number"]:focus {
+        border-color: #667eea;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+    }
+    
+    .range-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .buttons {
+        text-align: center;
+        margin-top: 16px;
+    }
+    
+    button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .generate-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        width: 100%;
+    }
+    
+    .generate-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .results {
+        margin-top: 16px;
+    }
+    
+    .numbers-display {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 6px;
+    }
+    
+    .number-item {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: clamp(28px, 6vw, 42px);
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        animation: bounceIn 0.4s ease forwards;
+        opacity: 0;
+    }
+    
+    @keyframes bounceIn {
+        0% { transform: scale(0.3); opacity: 0; }
+        50% { transform: scale(1.15); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .answer {
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 600;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        padding: 12px;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    .countdown {
+        font-weight: 700;
+        color: #dc2626;
+        margin-left: 5px;
+    }
+    
+    .progress-bar {
+        width: 100%;
+        height: 5px;
+        background: rgba(229, 231, 235, 0.5);
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 8px 0;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 3px;
+        transition: width 0.1s linear;
+    }
+    
+    @media (max-width: 600px) {
+        .range-inputs {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>🧠 Mental Calculation</h1>
+    <div class="form-group">
+        <label for="count">How many numbers?</label>
+        <input type="number" id="count" value="5" min="1" max="100">
+    </div>
+    <div class="form-group">
+        <label>Number Range:</label>
+        <div class="range-inputs">
+            <div>
+                <label for="min">From:</label>
+                <input type="number" id="min" value="10">
+            </div>
+            <div>
+                <label for="max">To:</label>
+                <input type="number" id="max" value="99">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="interval">Time between numbers (seconds):</label>
+        <input type="number" id="interval" value="1" min="0.5" max="10" step="0.1">
+    </div>
+    <div class="form-group">
+        <label for="delay">Answer delay (seconds):</label>
+        <input type="number" id="delay" value="10" min="0" max="60">
+    </div>
+    <div class="buttons">
+        <button class="generate-btn" onclick="generateNumbers()">🎲 Generate Numbers</button>
+    </div>
+    <div id="results" class="results" style="display:none;">
+        <div id="numbersDisplay" class="numbers-display"></div>
+        <div class="answer">
+            <div id="progressBar" class="progress-bar" style="display: none;">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <div id="answerText"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+let countdownInterval, progressInterval;
+
+function generateNumbers() {
+    const count = parseInt(document.getElementById('count').value);
+    const min = parseInt(document.getElementById('min').value);
+    const max = parseInt(document.getElementById('max').value);
+    const delay = parseFloat(document.getElementById('delay').value);
+    const intervalTime = parseFloat(document.getElementById('interval').value) * 1000;
+
+    clearInterval(countdownInterval);
+    clearInterval(progressInterval);
+
+    if (min >= max) {
+        alert('Min must be less than Max');
+        return;
+    }
+
+    const numbers = [];
+    for (let i = 0; i < count; i++) {
+        numbers.push(Math.floor(Math.random() * (max - min + 1)) + min);
+    }
+
+    const display = document.getElementById('numbersDisplay');
+    display.innerHTML = '';
+    document.getElementById('results').style.display = 'block';
+
+    // Show numbers one by one
+    numbers.forEach((num, index) => {
+        setTimeout(() => {
+            const el = document.createElement('div');
+            el.className = 'number-item';
+            el.textContent = num;
+            el.style.opacity = '1';
+            display.appendChild(el);
+        }, index * intervalTime);
+    });
+
+    const answerText = document.getElementById('answerText');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+
+    if (delay === 0) {
+        const sum = numbers.reduce((a, b) => a + b, 0);
+        answerText.textContent = `Sum: ${sum} | Average: ${(sum / count).toFixed(2)}`;
+    } else {
+        progressBar.style.display = 'block';
+        let timeLeft = delay;
+        answerText.innerHTML = `Calculating... <span class="countdown">${timeLeft}s</span>`;
+        
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            answerText.innerHTML = `Calculating... <span class="countdown">${timeLeft}s</span>`;
+            if (timeLeft <= 0) clearInterval(countdownInterval);
+        }, 1000);
+
+        let progress = 0;
+        progressInterval = setInterval(() => {
+            progress += 100 / (delay * 10);
+            progressFill.style.width = Math.min(progress, 100) + '%';
+            if (progress >= 100) clearInterval(progressInterval);
+        }, 100);
+
+        setTimeout(() => {
+            const sum = numbers.reduce((a, b) => a + b, 0);
+            answerText.textContent = `Sum: ${sum} | Average: ${(sum / count).toFixed(2)}`;
+            progressBar.style.display = 'none';
+        }, delay * 1000);
+    }
+}
+</script>
+</body>
+</html>
